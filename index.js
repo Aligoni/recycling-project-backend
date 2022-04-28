@@ -2,14 +2,13 @@ require('dotenv').config()
 
 const express = require('express')
 const cors = require("cors")
-const { resolve } = require('path')
+const expressValidator = require('express-validator')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static(resolve(__dirname, 'public')));
 
 const { multerUpload } = require('./config/cloudinary')
 const db = require("./models");
@@ -35,6 +34,10 @@ app.post("/image-upload", multerUpload, (req, res) => {
         })
     }
 });
+
+app.use('/admins', require('./routes/admins.routes'))
+app.use('/articles', require('./routes/articles.routes'))
+app.use('/subscribers', require('./routes/subscribers.routes'))
 
 const port = process.env.PORT || 8000
 
