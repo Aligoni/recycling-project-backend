@@ -158,20 +158,20 @@ exports.delete = async (req, res) => {
         })
 }
 
-exports.testMail = async (req, res) => {
-    const mailOptions = {
-        from: 'testname@gmail.com',
-        to: 'azizgoni01@gmail.com',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-    };
+// exports.testMail = async (req, res) => {
+//     const mailOptions = {
+//         from: 'testname@gmail.com',
+//         to: 'azizgoni01@gmail.com',
+//         subject: 'Sending Email using Node.js',
+//         text: 'That was easy!'
+//     };
 
-    transport.sendMail(mailOptions, (error, info) => {
-        if (error)
-            console.log(error)
-        else {
-            console.log("email sent successfully")
-            console.log(info)
-        }
-    })
-}
+//     transport.sendMail(mailOptions, (error, info) => {
+//         if (error)
+//             console.log(error)
+//         else {
+//             console.log("email sent successfully")
+//             console.log(info)
+//         }
+//     })
+// }
