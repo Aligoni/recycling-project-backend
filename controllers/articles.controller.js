@@ -2,20 +2,22 @@ const bcrypt = require('bcrypt')
 const db = require("../models");
 const Article = db.articles;
 const Op = db.Sequelize.Op;
-const { validationResult } = require('express-validator/check');
+const { transport } = require('../config/nodemailer.config')
+const { validationResult } = require('express-validator');
 
 // Create and save a new Article
 exports.create = async (req, res) => {
 
-    if (!req.file) {
-        return res.status(404).json({
-            msg: "Please provide image"
-        })
-    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
             errors: errors.array()
+        })
+    }
+
+    if (!req.file.mimetype.match(/^image/)) {
+        return res.status(400).json({
+            msg: "Please provide file of image type"
         })
     }
 
@@ -123,4 +125,53 @@ exports.like = async (req, res) => {
                 msg: error
             })
         })
+}
+
+
+exports.delete = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            errors: errors.array()
+        })
+    }
+
+    const id = req.params.id
+
+    Article.findByPk(id)
+        .then(async article => {
+            if (article) {
+                await article.destroy()
+                res.status(200).json({
+                    msg: "Article deleted successfully"
+                })
+            } else {
+                res.status(404).json({
+                    msg: "Article not found"
+                })
+            }
+        })
+        .catch(error => {
+            res.status(400).json({
+                msg: error
+            })
+        })
+}
+
+exports.testMail = async (req, res) => {
+    const mailOptions = {
+        from: 'testname@gmail.com',
+        to: 'azizgoni01@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+    };
+
+    transport.sendMail(mailOptions, (error, info) => {
+        if (error)
+            console.log(error)
+        else {
+            console.log("email sent successfully")
+            console.log(info)
+        }
+    })
 }

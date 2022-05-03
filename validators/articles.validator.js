@@ -8,6 +8,7 @@ exports.create = () => {
         body('title').exists(),
         body('content').exists(),
         body('summary').exists(),
+        body('image').exists().withMessage("provide image file"),
         body('adminId').exists().custom(value => {
             return Admin.findByPk(value).then(admin => {
                 if (!admin) return Promise.reject('Admin not found')
@@ -45,5 +46,11 @@ exports.like = () => {
                 if (!article) return Promise.reject('Article not found')
             })
         }),
+    ]
+}
+
+exports.delete = () => {
+    return [
+        param('id').exists()
     ]
 }

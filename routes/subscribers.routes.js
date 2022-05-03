@@ -5,5 +5,6 @@ const validate = require('../validators/subscribers.validator')
 router.get('/', subscribers.findAll)
 router.post('/', validate.create(), subscribers.create)
 router.get('/:id', validate.findOne(), subscribers.findOne)
+router.delete('/:id', validate.delete(), subscribers.delete)
 
 module.exports = router

@@ -23,3 +23,13 @@ exports.findOne = () => {
         }),
     ]
 }
+
+exports.delete = () => {
+    return [
+        param('id').exists().custom(value => {
+            return Subscriber.findByPk(value).then(subscriber => {
+                if (!subscriber) return Promise.reject('Subscriber not found')
+            })
+        }),
+    ]
+}

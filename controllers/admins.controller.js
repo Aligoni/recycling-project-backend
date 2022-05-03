@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const db = require("../models");
 const Admin = db.admins;
 const Op = db.Sequelize.Op;
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 // Create and save a new Admin
 exports.create = async (req, res) => {
