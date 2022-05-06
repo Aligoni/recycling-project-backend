@@ -5,10 +5,13 @@ const Article = db.articles
 
 exports.create = () => {
     return [
-        body('title').exists(),
+        body('title').exists().custom(value => {
+            return Article.findOne({where: {title: value}}).then(found => {
+                if (found) return Promise.reject('Article title already used')
+            })
+        }),
         body('content').exists(),
         body('summary').exists(),
-        body('image').exists().withMessage("provide image file"),
         body('adminId').exists().custom(value => {
             return Admin.findByPk(value).then(admin => {
                 if (!admin) return Promise.reject('Admin not found')

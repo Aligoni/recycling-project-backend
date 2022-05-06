@@ -22,19 +22,6 @@ app.get('/', async (req, res) => {
     res.json({ msg: "This is working" })
 })
 
-app.post("/image-upload", multerUpload, (req, res) => {
-    if (req.file) {
-        return res.status(200).json({
-            msg: "Upload successful",
-            image: req.file.path
-        })
-    } else {
-        return res.status(404).json({
-            msg: "Please provide image"
-        })
-    }
-});
-
 app.use('/admins', require('./routes/admins.routes'))
 app.use('/articles', require('./routes/articles.routes'))
 app.use('/subscribers', require('./routes/subscribers.routes'))

@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt')
 const db = require("../models");
 const Article = db.articles;
+const Subscriber = db.subscribers;
 const Op = db.Sequelize.Op;
-const { transport } = require('../config/nodemailer.config')
+// const { transport } = require('../config/nodemailer.config')
 const { validationResult } = require('express-validator');
 
 // Create and save a new Article
@@ -15,9 +16,16 @@ exports.create = async (req, res) => {
         })
     }
 
-    if (!req.file.mimetype.match(/^image/)) {
+    try {
+        if (!req.file.mimetype.match(/^image/)) {
+            return res.status(400).json({
+                msg: "Please provide file of image type"
+            })
+        }
+    } catch (e) {
         return res.status(400).json({
-            msg: "Please provide file of image type"
+            msg: "Please provide file of image type",
+            error: e
         })
     }
 
@@ -28,9 +36,30 @@ exports.create = async (req, res) => {
             res.json({
                 data: article
             })
+
+            const subscribers = await Subscriber.findAll()
+
+            const list = subscribers.map(item => item.email)
+            const subject = "New Article Posted!"
+            const text = "Hi. There is new article posted on the website. Come check it out!"
+
+            const mailOptions = {
+                from: 'Recycle-tonics! <admin-recycle-tronics@gmail.com>',
+                to: list,
+                subject,
+                text
+            }
+
+            // return transport.sendMail(mailOptions, (erro, info) => {
+            //     if (erro) {
+            //         console.log(erro.toString())
+            //         return
+            //     }
+            //     console.log('Email(s) sent successfully')
+            // });
         })
         .catch(error => {
-            res.status(400).json({
+            res.status(500).json({
                 error
             })
         })
