@@ -26,6 +26,12 @@ exports.findOne = () => {
     ]
 }
 
+exports.search = () => {
+    return [
+        param('value').exists()
+    ]
+}
+
 exports.update = () => {
     return [
         param('id').exists().custom(value => {

@@ -67,7 +67,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
     const articles = await Article.findAll({ include: ['admin'] })
-    res.json({
+    return res.json({
         data: articles
     })
 }
@@ -124,6 +124,35 @@ exports.update = async (req, res) => {
                 msg: error
             })
         })
+}
+
+exports.search = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            errors: errors.array()
+        })
+    }
+
+    const { value } = req.params;
+
+    let condition
+    if (value) {
+        condition = {
+            [Op.or]: [
+                { title: { [Op.like]: `%${value}%` } },
+                { summary: { [Op.like]: `%${value}%` } },
+                { content: { [Op.like]: `%${value}%` } }
+            ]
+        }
+    } else {
+        condition = null
+    }
+
+    const articles = await Article.findAll({ where: condition, include: ['admin'] })
+    return res.json({
+        data: articles
+    })
 }
 
 exports.like = async (req, res) => {
