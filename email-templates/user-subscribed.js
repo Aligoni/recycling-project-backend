@@ -251,7 +251,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
   <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
     <p style="font-size: 14px; line-height: 140%;">
     To unsubscribe to the notifications, please 
-    <a href="https://recycling-hud-uni.netlify.app/subscribers/unsubscribe-user/${subscriberId}">click this link</a>.
+    <a href="https://node-recycling-project-backend.herokuapp.com/subscribers/unsubscribe-user/${subscriberId}">click this link</a>.
     </p>
   </div>
 
