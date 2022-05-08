@@ -6,5 +6,6 @@ router.get('/', subscribers.findAll)
 router.post('/', validate.create(), subscribers.create)
 router.get('/:id', validate.findOne(), subscribers.findOne)
 router.delete('/:id', validate.delete(), subscribers.delete)
+router.get('/unsubscribe-user/:id', subscribers.unsubscribe)
 
 module.exports = router

@@ -43,20 +43,28 @@ exports.create = async (req, res) => {
             const list = subscribers.map(item => item.email)
             const subject = "New Article Posted!"
 
-            const mailOptions = {
-                from: 'Recycle-tonics! <admin-recycle-tronics@gmail.com>',
-                to: list,
-                subject,
-                html: htmlTemplate({articleId: article.id, articleTitle: article.title, articleSummary: article.summary})
-            }
-
-            return transport.sendMail(mailOptions, (erro, info) => {
-                if (erro) {
-                    console.log(erro.toString())
-                    return
+            subscribers.forEach(subscriber => {
+                const mailOptions = {
+                    from: 'Recycle-tonics! <admin-recycle-tronics@gmail.com>',
+                    to: subscriber.email,
+                    subject,
+                    html: htmlTemplate({
+                        articleId: article.id,
+                        articleTitle: article.title,
+                        articleSummary: article.summary,
+                        subscriberId: subscriber.id,
+                        subscriberName: subscriber.firstname
+                    })
                 }
-                console.log('Email(s) sent successfully')
-            });
+
+                transport.sendMail(mailOptions, (erro, info) => {
+                    if (erro) {
+                        console.log(erro.toString())
+                    } else
+                        console.log(`Email sent to ${subscriber.firstname} successfully`)
+                });
+            })
+
         })
         .catch(error => {
             console.log(error)

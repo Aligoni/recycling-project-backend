@@ -81,3 +81,23 @@ exports.delete = async (req, res) => {
             }
         })
 }
+
+exports.unsubscribe = async (req, res) => {
+
+    const id = req.params.id
+    if (!id) {
+        return res.status(400).json({
+            msg: "Provide subscriber id"
+        })
+    }
+
+    Subscriber.findByPk(id)
+        .then(async subscriber => {
+            if (subscriber) {
+                await subscriber.destroy()
+                res.redirect(`https://recycling-hud-uni.netlify.app/?unsubscribed=yes`)
+            } else {
+                res.redirect(`https://recycling-hud-uni.netlify.app/?unsubscribed=not-found`)
+            }
+        })
+}
