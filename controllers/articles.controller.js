@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const db = require("../models");
+const Admin = db.admins;
 const Article = db.articles;
 const Subscriber = db.subscribers;
 const Op = db.Sequelize.Op;
@@ -39,6 +40,7 @@ exports.create = async (req, res) => {
             })
 
             const subscribers = await Subscriber.findAll()
+            const admin = await Admin.findByPk(article.adminId)
 
             const list = subscribers.map(item => item.email)
             const subject = "New Article Posted!"
@@ -53,7 +55,8 @@ exports.create = async (req, res) => {
                         articleTitle: article.title,
                         articleSummary: article.summary,
                         subscriberId: subscriber.id,
-                        subscriberName: subscriber.firstname
+                        subscriberName: subscriber.firstname,
+                        adminName: admin.firstname +" "+ admin.lastname,
                     })
                 }
 

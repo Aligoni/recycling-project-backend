@@ -1,4 +1,4 @@
-module.exports = ({articleId, articleTitle, articleSummary, subscriberId, subscriberName}) => `
+module.exports = ({articleId, articleTitle, articleSummary, subscriberId, subscriberName, adminName}) => `
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -134,7 +134,9 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%;">A new article has been posted on Recyle-tronics! Come check it out.</p>
+    <p style="font-size: 14px; line-height: 140%;">
+    A new article has been posted on Recyle-tronics! written by ${adminName} Come check it out.
+    </p>
   </div>
 
       </td>
