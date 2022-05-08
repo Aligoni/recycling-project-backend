@@ -3,8 +3,9 @@ const db = require("../models");
 const Article = db.articles;
 const Subscriber = db.subscribers;
 const Op = db.Sequelize.Op;
-// const { transport } = require('../config/nodemailer.config')
+const { transport } = require('../config/nodemailer.config')
 const { validationResult } = require('express-validator');
+const htmlTemplate = require('../email-templates/user-subscribed')
 
 // Create and save a new Article
 exports.create = async (req, res) => {
@@ -41,24 +42,24 @@ exports.create = async (req, res) => {
 
             const list = subscribers.map(item => item.email)
             const subject = "New Article Posted!"
-            const text = "Hi. There is new article posted on the website. Come check it out!"
 
             const mailOptions = {
                 from: 'Recycle-tonics! <admin-recycle-tronics@gmail.com>',
                 to: list,
                 subject,
-                text
+                html: htmlTemplate({articleId: article.id, articleTitle: article.title, articleSummary: article.summary})
             }
 
-            // return transport.sendMail(mailOptions, (erro, info) => {
-            //     if (erro) {
-            //         console.log(erro.toString())
-            //         return
-            //     }
-            //     console.log('Email(s) sent successfully')
-            // });
+            return transport.sendMail(mailOptions, (erro, info) => {
+                if (erro) {
+                    console.log(erro.toString())
+                    return
+                }
+                console.log('Email(s) sent successfully')
+            });
         })
         .catch(error => {
+            console.log(error)
             res.status(500).json({
                 error
             })
@@ -66,7 +67,7 @@ exports.create = async (req, res) => {
 };
 
 exports.findAll = async (req, res) => {
-    const articles = await Article.findAll({ include: ['admin'] })
+    const articles = await Article.findAll({ include: ['admin'], order: [['createdAt', 'DESC']] })
     return res.json({
         data: articles
     })
@@ -149,7 +150,7 @@ exports.search = async (req, res) => {
         condition = null
     }
 
-    const articles = await Article.findAll({ where: condition, include: ['admin'] })
+    const articles = await Article.findAll({ where: condition, include: ['admin'], order: [['createdAt', 'DESC']]})
     return res.json({
         data: articles
     })
@@ -215,21 +216,3 @@ exports.delete = async (req, res) => {
             })
         })
 }
-
-// exports.testMail = async (req, res) => {
-//     const mailOptions = {
-//         from: 'testname@gmail.com',
-//         to: 'azizgoni01@gmail.com',
-//         subject: 'Sending Email using Node.js',
-//         text: 'That was easy!'
-//     };
-
-//     transport.sendMail(mailOptions, (error, info) => {
-//         if (error)
-//             console.log(error)
-//         else {
-//             console.log("email sent successfully")
-//             console.log(info)
-//         }
-//     })
-// }
