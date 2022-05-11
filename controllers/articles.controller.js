@@ -47,7 +47,7 @@ exports.create = async (req, res) => {
 
             subscribers.forEach(subscriber => {
                 const mailOptions = {
-                    from: 'Recycle-tonics! <admin-recycle-tronics@gmail.com>',
+                    from: 'Recycle-tronics! <admin-recycle-tronics@gmail.com>',
                     to: subscriber.email,
                     subject,
                     html: htmlTemplate({
